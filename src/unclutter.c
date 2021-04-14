@@ -141,8 +141,10 @@ static void parse_args(int argc, char *argv[]) {
                     break;
                 } else if (OPT_NAME_IS("window-jitter")) {
                     window_jitter_t *window_jitter = parse_window_jitter(optarg);
-                    if (window_jitter->jitter < 0)
-                        ELOG("Invalid window_jitter value specified.");
+                    if (window_jitter->jitter < 0) {
+                        ELOG("Invalid window_jitter value specified: \"%s\", ignoring.", optarg);
+                        ELOG("Maybe you forgot the separator \"%s\"?", WINDOW_JITTER_SEP);
+                    }
                     else
                         add_window_jitter(&config.window_jitter_list, window_jitter);
 

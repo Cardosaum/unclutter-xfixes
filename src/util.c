@@ -63,8 +63,12 @@ window_jitter_t *parse_window_jitter(char* str) {
     long jitter;
 
     window_jitter = calloc(sizeof(window_jitter_t), 1);
-    if (window_jitter == NULL) {
-        bail("Cannot allocate memory for new widow_jitter\n");
+    if (window_jitter == NULL)
+        bail("Cannot allocate memory for new widow_jitter");
+
+    if (!strstr(str, WINDOW_JITTER_SEP)) {
+        window_jitter->jitter = -1;
+        return window_jitter;
     }
 
     name = strtok(str, WINDOW_JITTER_SEP);
