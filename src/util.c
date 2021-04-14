@@ -96,32 +96,6 @@ void add_window_jitter(window_jitter_t **head, window_jitter_t *window_jitter) {
     return;
 }
 
-void print_window_jitter(window_jitter_t **head) {
-    if (*head == NULL) {
-        return;
-    } else {
-        window_jitter_t *last_node = *head;
-
-        printf("\n===\n");
-        while (last_node->next != NULL) {
-            printf("pointer: %p\n", &last_node);
-            printf("name: %s\n", last_node->name);
-            printf("len: %i\n", last_node->len);
-            printf("jitter: %li\n", last_node->jitter);
-            printf("next: %p\n", last_node->next);
-            printf("---\n");
-            last_node = last_node->next;
-        }
-        printf("pointer: %p\n", &last_node);
-        printf("name: %s\n", last_node->name);
-        printf("len: %i\n", last_node->len);
-        printf("jitter: %li\n", last_node->jitter);
-        printf("next: %p\n", last_node->next);
-        printf("===\n\n");
-    }
-    return;
-}
-
 long jitter_window_match(Window win) {
     window_jitter_t *window_jitter;
     XClassHint hint;
@@ -162,27 +136,6 @@ long jitter_window_match(Window win) {
     }
 
     return jitter;
-}
-
-bool is_on_window_jitter_list(Window win) {
-    Window child_in;
-    Window win_in;
-    Window win_dummy;
-    int root_x, root_y;
-    int win_x, win_y;
-    unsigned int mask;
-
-    child_in = win_in = win;
-
-    do {
-        win_in = child_in;
-        if (jitter_window_match(win_in)) {
-            return true;
-        }
-    } while (XQueryPointer(display, win_in, &win_dummy, &child_in, &root_x, &root_y, &win_x, &win_y, &mask)
-             && child_in != None);
-
-    return false;
 }
 
 long get_window_jitter(Window win) {

@@ -36,10 +36,6 @@ window_jitter_t *parse_window_jitter(char* str);
 
 void add_window_jitter(window_jitter_t **head, window_jitter_t *window_jitter);
 
-void print_window_jitter(window_jitter_t **head);
-
 long jitter_window_match(Window win);
-
-bool is_on_window_jitter_list(Window win);
 
 long get_window_jitter(Window win);
