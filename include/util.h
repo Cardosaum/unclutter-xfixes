@@ -31,3 +31,9 @@ long int parse_int(char *str);
 double parse_double(char *str);
 
 void parse_buttons_numbers(char *str, ignore_buttons_t *ignore_buttons);
+
+window_jitter_t *parse_window_jitter(char* str);
+
+void add_window_jitter(window_jitter_t **head, window_jitter_t *window_jitter);
+
+void print_window_jitter(window_jitter_t **head);

@@ -34,6 +34,7 @@ int default_screen;
 Config config = {
     .timeout = 5,
     .jitter = 0,
+    .window_jitter_list = NULL,
     .exclude_root = false,
     .ignore_scrolling = false,
     .ignore_buttons.count = 0,
@@ -97,6 +98,7 @@ static void parse_args(int argc, char *argv[]) {
         /* unclutter-xfixes options */
         { "timeout", required_argument, 0, 0 },
         { "jitter", required_argument, 0, 0 },
+        { "window-jitter", required_argument, 0, 0 },
         { "exclude-root", no_argument, 0, 0 },
         { "ignore-scrolling", no_argument, 0, 0 },
         { "ignore-buttons", required_argument, 0, 0 },
@@ -109,7 +111,7 @@ static void parse_args(int argc, char *argv[]) {
         { 0, 0, 0, 0 }
     };
 
-    while ((c = getopt_long_only(argc, argv, "t:j:bvhd:", long_options, &opt_index)) != -1) {
+    while ((c = getopt_long_only(argc, argv, "t:j:w:bvhd:", long_options, &opt_index)) != -1) {
         long value;
         double value_double;
         const char *opt_name = long_options[opt_index].name;
@@ -135,6 +137,15 @@ static void parse_args(int argc, char *argv[]) {
                         ELOG("Invalid jitter value specified.");
                     else
                         config.jitter = value;
+
+                    break;
+                } else if (OPT_NAME_IS("window-jitter")) {
+                    window_jitter_t *window_jitter = parse_window_jitter(optarg);
+                    if (window_jitter->jitter < 0)
+                        ELOG("Invalid window_jitter value specified.");
+                    else{
+                        add_window_jitter(&config.window_jitter_list, window_jitter);
+                        print_window_jitter(&config.window_jitter_list);}
 
                     break;
                 } else if (OPT_NAME_IS("exclude-root")) {

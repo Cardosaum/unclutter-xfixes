@@ -1,10 +1,19 @@
 // vim:ts=4:sw=4:expandtab
 #pragma once
 
+#define WINDOW_JITTER_SEP "="
+
 typedef struct match_t {
     char *name;
     int len;
 } match_t;
+
+typedef struct window_jitter_t {
+    char* name;
+    int len;
+    long jitter;
+    struct window_jitter_t *next;
+} window_jitter_t;
 
 typedef struct ignore_buttons_t {
     unsigned char count;
@@ -14,6 +23,7 @@ typedef struct ignore_buttons_t {
 typedef struct Config {
     double timeout;
     long jitter;
+    window_jitter_t *window_jitter_list;
     bool exclude_root;
     bool ignore_scrolling;
     ignore_buttons_t ignore_buttons;

@@ -164,6 +164,8 @@ static void idle_cb(EV_P_ ev_timer *w, int revents) {
 
     cursor_find(&child, &root_x, &root_y);
     if (child) { // not on root
+        jitter_window_match(child);
+        /* printf("\nvalue: %i\n", jitter_window_match(child)); */
         if (!config.onescreen || active_screen == default_screen)
             if (!config.ignore_matches || !is_on_ignore_list(child))
                 cursor_hide();
