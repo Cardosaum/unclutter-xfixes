@@ -158,3 +158,46 @@ long jitter_window_match(Window win) {
 
     return jitter;
 }
+
+bool is_on_window_jitter_list(Window win) {
+    Window child_in;
+    Window win_in;
+    Window win_dummy;
+    int root_x, root_y;
+    int win_x, win_y;
+    unsigned int mask;
+
+    child_in = win_in = win;
+
+    do {
+        win_in = child_in;
+        if (jitter_window_match(win_in)) {
+            return true;
+        }
+    } while (XQueryPointer(display, win_in, &win_dummy, &child_in, &root_x, &root_y, &win_x, &win_y, &mask)
+             && child_in != None);
+
+    return false;
+}
+
+long get_window_jitter(Window win) {
+    Window child_in;
+    Window win_in;
+    Window win_dummy;
+    int root_x, root_y;
+    int win_x, win_y;
+    unsigned int mask;
+    long jitter = 0;
+
+    child_in = win_in = win;
+
+    do {
+        win_in = child_in;
+        if ((jitter = jitter_window_match(win_in))) {
+            return jitter;
+        }
+    } while (XQueryPointer(display, win_in, &win_dummy, &child_in, &root_x, &root_y, &win_x, &win_y, &mask)
+             && child_in != None);
+
+    return jitter;
+}

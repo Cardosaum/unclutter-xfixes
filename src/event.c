@@ -84,11 +84,18 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
         if (config.jitter > 0 && cookie->evtype == XI_RawMotion) {
             Window child;
             int root_x, root_y;
+            long jitter = config.jitter;
 
             cursor_find(&child, &root_x, &root_y);
+
+            if (is_on_window_jitter_list(child)) {
+                jitter = get_window_jitter(child);
+                if (!jitter) jitter = config.jitter;
+            }
+
             int dx = last_cursor_pos.x - root_x;
             int dy = last_cursor_pos.y - root_y;
-            if (dx * dx + dy * dy < config.jitter * config.jitter) {
+            if (dx * dx + dy * dy < jitter * jitter) {
                 continue;
             }
 
@@ -164,8 +171,6 @@ static void idle_cb(EV_P_ ev_timer *w, int revents) {
 
     cursor_find(&child, &root_x, &root_y);
     if (child) { // not on root
-        jitter_window_match(child);
-        /* printf("\nvalue: %i\n", jitter_window_match(child)); */
         if (!config.onescreen || active_screen == default_screen)
             if (!config.ignore_matches || !is_on_ignore_list(child))
                 cursor_hide();

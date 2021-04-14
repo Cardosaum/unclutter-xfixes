@@ -143,9 +143,8 @@ static void parse_args(int argc, char *argv[]) {
                     window_jitter_t *window_jitter = parse_window_jitter(optarg);
                     if (window_jitter->jitter < 0)
                         ELOG("Invalid window_jitter value specified.");
-                    else{
+                    else
                         add_window_jitter(&config.window_jitter_list, window_jitter);
-                        print_window_jitter(&config.window_jitter_list);}
 
                     break;
                 } else if (OPT_NAME_IS("exclude-root")) {
