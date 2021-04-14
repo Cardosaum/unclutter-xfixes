@@ -8,7 +8,7 @@ unclutter-xfixes - rewrite of unclutter using the X11-Xfixes extension
 
 == SYNOPSIS
 
-unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--hide-on-touch*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*] [*--start-hidden*]
+unclutter [*--timeout* _seconds_] [*--jitter* _radius_] [*--window-jitter* _window_ _radius_] [*--exclude-root*] [*--ignore-scrolling*] [*--ignore-buttons* _buttons_] [*--hide-on-touch*] [*--fork*|*-b*] [*--help*|*-h*] [*--version*|*-v*] [*--start-hidden*]
 
 Compatibility arguments:
 
@@ -30,6 +30,10 @@ it was neither moved nor any button was pressed. (Default: 5)
 
 *--jitter* _radius_::
 Ignore cursor movements if the cursor hasn't moved at least _radius_ pixels.
+
+*--window-jitter* _window_ _radius_::
+Same as *--jitter*, but applies only to a _window_ that matches
+_{WM_NAME,WM_CLASS}_, in a case insensitive search.
 
 *--exclude-root*::
 Don't hide the mouse cursor if it is idling over the root window and not an
