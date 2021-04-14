@@ -24,6 +24,8 @@ typedef struct Config {
     double timeout;
     long jitter;
     window_jitter_t *window_jitter_list;
+    Window window_jitter_last_seen_id;
+    long window_jitter_last_seen_jitter;
     bool exclude_root;
     bool ignore_scrolling;
     ignore_buttons_t ignore_buttons;

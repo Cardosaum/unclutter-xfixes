@@ -88,9 +88,15 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
 
             cursor_find(&child, &root_x, &root_y);
 
-            if (!(jitter = get_window_jitter(child)))
-                jitter = config.jitter;
+            if (config.window_jitter_last_seen_id != 0 &&
+                config.window_jitter_last_seen_id == child)
+                jitter = config.window_jitter_last_seen_jitter;
+            else
+                if (!(jitter = get_window_jitter(child)))
+                    jitter = config.jitter;
 
+            config.window_jitter_last_seen_id = child;
+            config.window_jitter_last_seen_jitter = jitter;
             int dx = last_cursor_pos.x - root_x;
             int dy = last_cursor_pos.y - root_y;
             if (dx * dx + dy * dy < jitter * jitter) {
