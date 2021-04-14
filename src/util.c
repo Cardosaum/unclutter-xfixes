@@ -127,34 +127,35 @@ long jitter_window_match(Window win) {
     XClassHint hint;
     char *name;
     long jitter = 0;
+    int xfetchname;
+    int xgetclasshint;
 
     if (config.window_jitter_list == NULL)
         return jitter;
     else
         window_jitter = config.window_jitter_list;
 
-    if (XFetchName(display, win, &name)) {
+    xfetchname = XFetchName(display, win, &name);
+    xgetclasshint = XGetClassHint(display, win, &hint);
+
+    if (xfetchname || xgetclasshint) {
         while (window_jitter != NULL) {
-            if (strncasecmp(window_jitter->name, name, window_jitter->len) == 0) {
-                jitter = window_jitter->jitter;
-                break;
+            if (xfetchname) {
+                if (strncasecmp(window_jitter->name, name, window_jitter->len) == 0) {
+                    jitter = window_jitter->jitter;
+                    break;
+                }
+            }
+            if (xgetclasshint) {
+                if (strncasecmp(window_jitter->name, hint.res_name, window_jitter->len) == 0 ||
+                    strncasecmp(window_jitter->name, hint.res_class, window_jitter->len) == 0) {
+                    jitter = window_jitter->jitter;
+                    break;
+                }
             }
             window_jitter = window_jitter->next;
         }
         XFree(name);
-        if (jitter) return jitter;
-    }
-
-    window_jitter = config.window_jitter_list;
-    if (XGetClassHint(display, win, &hint)) {
-        while (window_jitter != NULL) {
-            if (strncasecmp(window_jitter->name, hint.res_name, window_jitter->len) == 0 ||
-                strncasecmp(window_jitter->name, hint.res_class, window_jitter->len) == 0) {
-                jitter = window_jitter->jitter;
-                break;
-            }
-            window_jitter = window_jitter->next;
-        }
         XFree(hint.res_name);
         XFree(hint.res_class);
         if (jitter) return jitter;
