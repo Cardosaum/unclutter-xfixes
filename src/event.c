@@ -95,6 +95,7 @@ static void x_check_cb(EV_P_ ev_check *w, int revents) {
                 if (!(jitter = get_window_jitter(child)))
                     jitter = config.jitter;
 
+            printf("jitter: %li\n", jitter);
             config.window_jitter_last_seen_id = child;
             config.window_jitter_last_seen_jitter = jitter;
             int dx = last_cursor_pos.x - root_x;

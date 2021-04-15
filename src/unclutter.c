@@ -61,11 +61,17 @@ int main(int argc, char *argv[]) {
         run();
 }
 
+int catcher(Display *disp, XErrorEvent *xe) {
+    /* Deliberately empty. */
+    return 0;
+}
+
 static void run(void) {
     display = XOpenDisplay(NULL);
     if (display == NULL)
         bail("Failed to connect to the X server.");
 
+    XSetErrorHandler(catcher);
     display_init();
     extensions_init();
     if (config.start_hidden)
