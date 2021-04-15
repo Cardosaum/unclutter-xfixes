@@ -119,6 +119,7 @@ long jitter_window_match(Window win) {
                     jitter = window_jitter->jitter;
                     break;
                 }
+                XFree(name);
             }
             if (xgetclasshint) {
                 if (strncasecmp(window_jitter->name, hint.res_name, window_jitter->len) == 0 ||
@@ -126,12 +127,11 @@ long jitter_window_match(Window win) {
                     jitter = window_jitter->jitter;
                     break;
                 }
+                XFree(hint.res_name);
+                XFree(hint.res_class);
             }
             window_jitter = window_jitter->next;
         }
-        XFree(name);
-        XFree(hint.res_name);
-        XFree(hint.res_class);
         if (jitter) return jitter;
     }
 
